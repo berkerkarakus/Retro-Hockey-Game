@@ -1,11 +1,10 @@
-
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.Random;
 
-public class GamePanel extends JPanel implements Runnable {
-
+public class GamePanel extends JPanel implements Runnable{
 
     static final int GAME_WIDTH = 1000;
     static final int GAME_HEIGHT = (int)(GAME_WIDTH * (0.5555));
@@ -27,7 +26,7 @@ public class GamePanel extends JPanel implements Runnable {
         newBall();
         score = new Score(GAME_WIDTH,GAME_HEIGHT);
         this.setFocusable(true);
-        //this.addKeyListener(new AL());
+        this.addKeyListener(new AL());
         this.setPreferredSize(SCREEN_SIZE);
 
         gameThread = new Thread(this);
@@ -53,7 +52,8 @@ public class GamePanel extends JPanel implements Runnable {
         paddle2.draw(g);
         ball.draw(g);
         score.draw(g);
-        Toolkit.getDefaultToolkit().sync();
+        Toolkit.getDefaultToolkit().sync(); // I forgot to add this line of code in the video, it helps with the animation
+
     }
     public void move() {
         paddle1.move();
@@ -129,6 +129,16 @@ public class GamePanel extends JPanel implements Runnable {
                 repaint();
                 delta--;
             }
+        }
+    }
+    public class AL extends KeyAdapter {
+        public void keyPressed(KeyEvent e) {
+            paddle1.keyPressed(e);
+            paddle2.keyPressed(e);
+        }
+        public void keyReleased(KeyEvent e) {
+            paddle1.keyReleased(e);
+            paddle2.keyReleased(e);
         }
     }
 }
