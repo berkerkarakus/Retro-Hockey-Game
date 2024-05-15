@@ -1,8 +1,12 @@
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Random;
+
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -22,6 +26,7 @@ public class GamePanel extends JPanel implements Runnable{
     Score score;
 
     GamePanel(){
+        selectTeams(); // Let players select teams at the beginning
         newPaddles();
         newBall();
         score = new Score(GAME_WIDTH,GAME_HEIGHT);
@@ -139,6 +144,90 @@ public class GamePanel extends JPanel implements Runnable{
         public void keyReleased(KeyEvent e) {
             paddle1.keyReleased(e);
             paddle2.keyReleased(e);
+        }
+    }
+
+
+
+    // Define teams
+    private enum Team {
+        BESIKTAS, GALATASARAY, FENERBAHCE, TRABZONSPOR
+    }
+
+    // Selected teams
+    private Team team1;
+    private Team team2;
+
+
+    // Method to let players select teams
+    private void selectTeams() {
+        // Create a dialog for team selection
+        JDialog teamSelectionDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Team Selection", true);
+        teamSelectionDialog.setLayout(new GridLayout(3, 2));
+
+        // Add buttons for team selection
+        JButton besiktasButton = new JButton("Beşiktaş");
+        besiktasButton.addActionListener(e -> {
+            team1 = Team.BESIKTAS;
+            besiktasButton.setEnabled(false);
+        });
+        JButton galatasarayButton = new JButton("Galatasaray");
+        galatasarayButton.addActionListener(e -> {
+            team1 = Team.GALATASARAY;
+            galatasarayButton.setEnabled(false);
+        });
+        JButton fenerbahceButton = new JButton("Fenerbahçe");
+        fenerbahceButton.addActionListener(e -> {
+            team1 = Team.FENERBAHCE;
+            fenerbahceButton.setEnabled(false);
+        });
+        JButton trabzonsporButton = new JButton("Trabzonspor");
+        trabzonsporButton.addActionListener(e -> {
+            team1 = Team.TRABZONSPOR;
+            trabzonsporButton.setEnabled(false);
+        });
+
+        // Add buttons to the dialog
+        teamSelectionDialog.add(besiktasButton);
+        teamSelectionDialog.add(galatasarayButton);
+        teamSelectionDialog.add(fenerbahceButton);
+        teamSelectionDialog.add(trabzonsporButton);
+
+        // Set dialog properties
+        teamSelectionDialog.setSize(300, 150);
+        teamSelectionDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        teamSelectionDialog.setLocationRelativeTo(null);
+        teamSelectionDialog.setVisible(true);
+    }
+
+    // Determine the winning team and play its anthem
+    private void playWinningAnthem() {
+        Team winningTeam = score.player1 > score.player2 ? team1 : team2;
+        switch (winningTeam) {
+            case BESIKTAS:
+                playAudio("/path/to/besiktas_anthem.wav");
+                break;
+            case GALATASARAY:
+                playAudio("/path/to/galatasaray_anthem.wav");
+                break;
+            case FENERBAHCE:
+                playAudio("/path/to/fenerbahce_anthem.wav");
+                break;
+            case TRABZONSPOR:
+                playAudio("/path/to/trabzonspor_anthem.wav");
+                break;
+        }
+    }
+
+    // Method to play audio
+    private void playAudio(String filePath) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource(filePath));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
