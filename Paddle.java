@@ -3,14 +3,17 @@ import java.awt.event.*;
 
 public class Paddle extends Rectangle{
 
+    String id1;
     int id;
     int yVelocity;
     int speed = 10;
 
-    Paddle(int x, int y, int PADDLE_WIDTH, int PADDLE_HEIGHT, int id){
+    Paddle(int x, int y, int PADDLE_WIDTH, int PADDLE_HEIGHT, String id1, int id){
         super(x,y,PADDLE_WIDTH,PADDLE_HEIGHT);
         this.id=id;
+        this.id1=id1;
     }
+
 
     public void keyPressed(KeyEvent e) {
         switch(id) {
@@ -59,10 +62,38 @@ public class Paddle extends Rectangle{
         y= y + yVelocity;
     }
     public void draw(Graphics g) {
-        if(id==1)
-            g.setColor(Color.blue);
-        else
-            g.setColor(Color.red);
-        g.fillRect(x, y, width, height);
+        if(id1=="Fenerbahce") {
+
+            g.setColor(Color.YELLOW);
+            g.fillRect(x, y, width / 2, height);  // Fill half the width with yellow
+
+            // Draw the second half in blue
+            g.setColor(Color.BLUE);
+            g.fillRect(x + width / 2, y, width / 2, height);
+        } else if (id1=="Galatasaray") {
+            g.setColor(Color.YELLOW);
+            g.fillRect(x, y, width / 2, height);  // Fill half the width with yellow
+
+            // Draw the second half in blue
+            g.setColor(Color.RED);
+            g.fillRect(x + width / 2, y, width / 2, height);
+
+        } else if (id1=="Trabzonspor") {
+            g.setColor(Color.RED);
+            g.fillRect(x, y, width / 2, height);  // Fill half the width with yellow
+
+            // Draw the second half in blue
+            g.setColor(Color.BLUE);
+            g.fillRect(x + width / 2, y, width / 2, height);
+
+        } else if (id1=="Besiktas") {
+            g.setColor(Color.WHITE);
+            g.fillRect(x, y, width / 2, height);  // Fill half the width with yellow
+
+
+            g.setColor(Color.black);
+            g.fillRect(x + width / 2, y, width / 2, height);
+        }
     }
 }
+
