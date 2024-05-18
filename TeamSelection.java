@@ -10,32 +10,32 @@ public class TeamSelection extends JFrame {
 
     public TeamSelection() {
         setTitle("Select Teams");
-        setSize(800, 500); // Increased size of the window
+        setSize(800, 500); 
         getContentPane().setBackground(Color.BLACK);
-        setLayout(new GridLayout(3, 1, 10, 10)); // 3 rows, 1 column, with vertical and horizontal gaps
+        setLayout(new GridLayout(3, 1, 10, 10)); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Team options
+      
         String[] teams = {"Fenerbahce", "Galatasaray", "Besiktas", "Trabzonspor"};
 
-        // Set up the combo boxes for team selection
+     
         playerOneComboBox = createStyledComboBox(teams);
         playerTwoComboBox = createStyledComboBox(teams);
 
-        // Panel for player one selection
+       
         JPanel playerOnePanel = new JPanel();
         playerOnePanel.setBackground(Color.BLACK);
         playerOnePanel.add(createStyledLabel("Player 1: ", 18));
         playerOnePanel.add(playerOneComboBox);
 
-        // Panel for player two selection
+        
         JPanel playerTwoPanel = new JPanel();
         playerTwoPanel.setBackground(Color.BLACK);
         playerTwoPanel.add(createStyledLabel("Player 2: ", 18));
         playerTwoPanel.add(playerTwoComboBox);
 
-        // Set up the start button
+      
         startButton = new JButton("Start Game");
         styleButton(startButton, 18);
         startButton.addActionListener(new ActionListener() {
