@@ -75,8 +75,8 @@ public class PongGame extends JFrame {
 
     private void startGame() {
 
-        TeamSelection frame = new TeamSelection();
-        frame.setVisible(true);
+        //TeamSelection frame = new TeamSelection();
+        //frame.setVisible(true);
     }
 
     public static void main(String[] args) {
