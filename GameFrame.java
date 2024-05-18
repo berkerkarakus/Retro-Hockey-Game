@@ -1,10 +1,11 @@
 import java.awt.*;
 import javax.swing.*;
 public class GameFrame extends JFrame {
-    GamePanel panel=new GamePanel();
+    GamePanel panel;
 
      public GameFrame(){
 
+         panel = new GamePanel();
         this.add(panel);
         this.setTitle("Retro Hockey Game");
         this.setResizable(false);
