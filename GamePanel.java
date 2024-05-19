@@ -1,12 +1,8 @@
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Random;
-
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -16,6 +12,8 @@ public class GamePanel extends JPanel implements Runnable{
     static final int BALL_DIAMETER = 20;
     static final int PADDLE_WIDTH = 25;
     static final int PADDLE_HEIGHT = 100;
+
+    private GameEndListener listener;
     Thread gameThread;
     Image image;
     Graphics graphics;
@@ -25,8 +23,17 @@ public class GamePanel extends JPanel implements Runnable{
     Ball ball;
     Score score;
 
-    GamePanel(){
-        selectTeams(); // Let players select teams at the beginning
+    String Team1;
+
+    String Team2;
+
+    String WinnerTeam;
+
+    int WinnerId;
+    GamePanel( String TeamSelected1,String TeamSelected2,GameEndListener listener){
+        this.listener=listener;
+        Team1=TeamSelected1;
+        Team2=TeamSelected2;
         newPaddles();
         newBall();
         score = new Score(GAME_WIDTH,GAME_HEIGHT);
@@ -43,8 +50,8 @@ public class GamePanel extends JPanel implements Runnable{
         ball = new Ball((GAME_WIDTH/2)-(BALL_DIAMETER/2),random.nextInt(GAME_HEIGHT-BALL_DIAMETER),BALL_DIAMETER,BALL_DIAMETER);
     }
     public void newPaddles() {
-        paddle1 = new Paddle(0,(GAME_HEIGHT/2)-(PADDLE_HEIGHT/2),PADDLE_WIDTH,PADDLE_HEIGHT,1);
-        paddle2 = new Paddle(GAME_WIDTH-PADDLE_WIDTH,(GAME_HEIGHT/2)-(PADDLE_HEIGHT/2),PADDLE_WIDTH,PADDLE_HEIGHT,2);
+        paddle1 = new Paddle(0,(GAME_HEIGHT/2)-(PADDLE_HEIGHT/2),PADDLE_WIDTH,PADDLE_HEIGHT,Team1,1);
+        paddle2 = new Paddle(GAME_WIDTH-PADDLE_WIDTH,(GAME_HEIGHT/2)-(PADDLE_HEIGHT/2),PADDLE_WIDTH,PADDLE_HEIGHT,Team2,2);
     }
     public void paint(Graphics g) {
         image = createImage(getWidth(),getHeight());
@@ -57,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable{
         paddle2.draw(g);
         ball.draw(g);
         score.draw(g);
-        Toolkit.getDefaultToolkit().sync(); 
+        Toolkit.getDefaultToolkit().sync(); // I forgot to add this line of code in the video, it helps with the animation
 
     }
     public void move() {
@@ -134,7 +141,21 @@ public class GamePanel extends JPanel implements Runnable{
                 repaint();
                 delta--;
             }
+            if(score.player1==3){
+                WinnerTeam=Team1;
+                WinnerId=1;
+                break;
+
+            }
+            if(score.player2==3){
+                WinnerTeam=Team2;
+                WinnerId=2;
+                break;
+            }
         }
+        listener.onGameEnd();
+        EndGameScreen screen=new EndGameScreen(WinnerTeam,WinnerId);
+        screen.setVisible(true);
     }
     public class AL extends KeyAdapter {
         public void keyPressed(KeyEvent e) {
@@ -148,86 +169,4 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
 
-
-    // Define teams
-    private enum Team {
-        BESIKTAS, GALATASARAY, FENERBAHCE, TRABZONSPOR
-    }
-
-    // Selected teams
-    private Team team1;
-    private Team team2;
-
-
-    // Method to let players select teams
-    private void selectTeams() {
-        // Create a dialog for team selection
-        JDialog teamSelectionDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Team Selection", true);
-        teamSelectionDialog.setLayout(new GridLayout(3, 2));
-
-        // Add buttons for team selection
-        JButton besiktasButton = new JButton("Beşiktaş");
-        besiktasButton.addActionListener(e -> {
-            team1 = Team.BESIKTAS;
-            besiktasButton.setEnabled(false);
-        });
-        JButton galatasarayButton = new JButton("Galatasaray");
-        galatasarayButton.addActionListener(e -> {
-            team1 = Team.GALATASARAY;
-            galatasarayButton.setEnabled(false);
-        });
-        JButton fenerbahceButton = new JButton("Fenerbahçe");
-        fenerbahceButton.addActionListener(e -> {
-            team1 = Team.FENERBAHCE;
-            fenerbahceButton.setEnabled(false);
-        });
-        JButton trabzonsporButton = new JButton("Trabzonspor");
-        trabzonsporButton.addActionListener(e -> {
-            team1 = Team.TRABZONSPOR;
-            trabzonsporButton.setEnabled(false);
-        });
-
-        // Add buttons to the dialog
-        teamSelectionDialog.add(besiktasButton);
-        teamSelectionDialog.add(galatasarayButton);
-        teamSelectionDialog.add(fenerbahceButton);
-        teamSelectionDialog.add(trabzonsporButton);
-
-        // Set dialog properties
-        teamSelectionDialog.setSize(300, 150);
-        teamSelectionDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        teamSelectionDialog.setLocationRelativeTo(null);
-        teamSelectionDialog.setVisible(true);
-    }
-
-    // Determine the winning team and play its anthem
-    private void playWinningAnthem() {
-        Team winningTeam = score.player1 > score.player2 ? team1 : team2;
-        switch (winningTeam) {
-            case BESIKTAS:
-                playAudio("/path/to/besiktas_anthem.wav");
-                break;
-            case GALATASARAY:
-                playAudio("/path/to/galatasaray_anthem.wav");
-                break;
-            case FENERBAHCE:
-                playAudio("/path/to/fenerbahce_anthem.wav");
-                break;
-            case TRABZONSPOR:
-                playAudio("/path/to/trabzonspor_anthem.wav");
-                break;
-        }
-    }
-
-    // Method to play audio
-    private void playAudio(String filePath) {
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource(filePath));
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
