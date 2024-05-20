@@ -20,4 +20,28 @@ public class Score extends Rectangle {
         g.drawString(String.valueOf(player1/10)+String.valueOf(player1%10), (GAME_WIDTH/2)-85, 50);
         g.drawString(String.valueOf(player2/10)+String.valueOf(player2%10), (GAME_WIDTH/2)+20,50);
     }
+
+    public void setPlayer1Score(int player1){
+        this.player1=player1;
+    }
+
+    public void setPlayer2Score(int player2){
+        this.player2=player2;
+    }
+
+    public int getPlayer1Score() {
+        return player1;
+    }
+
+    public int getPlayer2Score() {
+        return player2;
+    }
+
+    public void incrementPlayer1Score() {
+        player1++;
+    }
+
+    public void incrementPlayer2Score() {
+        player2++;
+    }
 }

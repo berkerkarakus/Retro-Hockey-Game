@@ -8,12 +8,11 @@ public class Paddle extends Rectangle{
     int yVelocity;
     int speed = 10;
 
-    Paddle(int x, int y, int PADDLE_WIDTH, int PADDLE_HEIGHT, String id1, int id){
+    Paddle(int x, int y, int PADDLE_WIDTH, int PADDLE_HEIGHT, String id1,int id){
         super(x,y,PADDLE_WIDTH,PADDLE_HEIGHT);
-        this.id=id;
         this.id1=id1;
+        this.id=id;
     }
-
 
     public void keyPressed(KeyEvent e) {
         switch(id) {
@@ -58,6 +57,11 @@ public class Paddle extends Rectangle{
     public void setYDirection(int yDirection) {
         yVelocity = yDirection;
     }
+
+    public int getYDirection() {
+        return yVelocity;
+    }
+
     public void move() {
         y= y + yVelocity;
     }
@@ -96,4 +100,3 @@ public class Paddle extends Rectangle{
         }
     }
 }
-
