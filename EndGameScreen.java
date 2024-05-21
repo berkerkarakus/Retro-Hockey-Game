@@ -90,11 +90,11 @@ public class EndGameScreen extends JFrame {
             case "Fenerbahce":
                 return color1;
             case "Galatasaray":
-                return color2;
+                return color1;
             case "Besiktas":
                 return color1; // or any other color
             case "Trabzonspor":
-                return color2; // or any other color
+                return color1; // or any other color
             default:
                 return Color.WHITE; // Default color
         }

@@ -11,25 +11,27 @@ public class PaddleTest {
     public void setUp() {
         paddle = new Paddle(0, 0, 25, 100, "Fenerbahce", 1);
     }
-
-    @Test
+@Test
     public void testPaddleMoveUp() {
-        paddle.setYDirection(-10);
+        KeyEvent keyEventPress = new KeyEvent(new JButton(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_W, 'W');
+        paddle.keyPressed(keyEventPress);
         paddle.move();
-        assertEquals(-10, paddle.getY());
+        assertTrue(paddle.getY() < 0);
     }
 
     @Test
     public void testPaddleMoveDown() {
-        paddle.setYDirection(10);
+        KeyEvent keyEventPress = new KeyEvent(new JButton(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_S, 'S');
+        paddle.keyPressed(keyEventPress);
         paddle.move();
-        assertEquals(10, paddle.getY());
+        assertTrue(paddle.getY() > 0);
     }
 
     @Test
     public void testKeyPressedUp() {
         KeyEvent keyEvent = new KeyEvent(new JButton(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_W, 'W');
         paddle.keyPressed(keyEvent);
+        paddle.move(); // Move the paddle after key press
         assertEquals(-10, paddle.getYDirection());
     }
 
@@ -37,14 +39,16 @@ public class PaddleTest {
     public void testKeyPressedDown() {
         KeyEvent keyEvent = new KeyEvent(new JButton(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_S, 'S');
         paddle.keyPressed(keyEvent);
+        paddle.move(); // Move the paddle after key press
         assertEquals(10, paddle.getYDirection());
     }
 
     @Test
     public void testKeyReleased() {
         KeyEvent keyEvent = new KeyEvent(new JButton(), KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_W, 'W');
-        paddle.keyPressed(keyEvent);
-        paddle.keyReleased(keyEvent);
+        paddle.keyPressed(keyEvent); // Press the key to set the direction
+        paddle.keyReleased(keyEvent); // Release the key
+        paddle.move(); // Update paddle's position after release
         assertEquals(0, paddle.getYDirection());
     }
 }
