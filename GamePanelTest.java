@@ -36,7 +36,7 @@ public class GamePanelTest {
         ball.setXDirection(0);
         ball.setYDirection(-5);  // Moving upwards
 
-        for (int i = 0; i < 60; i++) {  // Simulate the game for collusion to happen
+        for (int i = 0; i < 1000; i++) {  // Simulate the game for collusion to happen
             gamePanel.move();
             gamePanel.checkCollision();
         }
@@ -54,7 +54,7 @@ public class GamePanelTest {
         ball.setYDirection(5);  // Moving downwards
 
 
-        for (int i = 0; i < 60; i++) {  // Simulate the game for collusion to happen
+        for (int i = 0; i < 1000; i++) {  // Simulate the game for collusion to happen
             gamePanel.move();
             gamePanel.checkCollision();
         }
