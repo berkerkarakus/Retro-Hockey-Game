@@ -62,7 +62,7 @@ public class EndGameScreen extends JFrame {
         setVisible(true);
     }
 
-    private void setTeamColors(String team) {
+    void setTeamColors(String team) {
         // Customize these colors based on your team color scheme
         switch (team) {
             case "Fenerbahce":
